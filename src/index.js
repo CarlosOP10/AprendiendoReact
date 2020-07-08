@@ -133,15 +133,18 @@ class Game extends React.Component {
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
-    } else {
+    } else if (this.state.stepNumber === 9) {
+      status = "El juego termino, es un empate!"
+
+    } else
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-    }
+
     const isAsendente = this.state.isAscendente;
     if (!isAsendente) {
       moves.reverse();
     }
     return (
-      <div className="game">
+      <div className="game" >
         <div className="game-board">
           <Board
             squares={current.squares}
