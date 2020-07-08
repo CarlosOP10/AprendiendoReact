@@ -2,58 +2,53 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-// class Square extends React.Component {
-//     // constructor(props) {
-//     //     super(props);
-//     //     this.state = {
-//     //         value: null,
-//     //     };
-//     // }
-//     render() {
-//       return (
-//         <button className="square" onClick={()=> { this.props.onClick()}}>
-//           {this.props.value}
-//         </button>
-//       );
-//     }
-//   }
-function Square(props) {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
-class Board extends React.Component {
-  // constructor(props){
-  //     super(props)
-  //     this.state={
-  //         squares: Array(9).fill(null),
-  //         xIsNext: true,
-  //     };
-  // }  
-  renderSquare(i) {
-    return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
+  function Square(props){
+      return (
+          <button className="square" onClick={props.onClick}>
+            {props.value}
+          </button>
+      );
   }
+  class Board extends React.Component {
+    renderSquare(i) {
+      return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)}/>;
+    }
+   
+    render() {
+        const valueSquares=[
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+        ];
 
-  render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+      return (
+        <div>
+          {
+          /* <div className="board-row">
+            {this.renderSquare(0)}
+            {this.renderSquare(1)}      
+            {this.renderSquare(2)}
+          </div>
+          <div className="board-row">
+            {this.renderSquare(3)}
+            {this.renderSquare(4)}
+            {this.renderSquare(5)}
+          </div>
+          <div className="board-row">
+            {this.renderSquare(6)}
+            {this.renderSquare(7)}
+            {this.renderSquare(8)}
+          </div> */
+          valueSquares.map((value,index) => {
+            return <div className="board-row" key={index}>
+                    {
+                        value.map((valor,posicion) => {
+                            return <b key={posicion}>{this.renderSquare(valor)}</b>
+                        })
+                    }
+                   </div>
+           })
+          }
       </div>
     );
   }
