@@ -2,53 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square(props) {
-  return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
-    </button>
-  );
-}
-class Board extends React.Component {
-  renderSquare(i) {
-    return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
+
+  function Square(props){
+     
+      const isWinner= props.isWinner ? "squareWinner square" : "square"
+      return (
+          <button className={isWinner} onClick={props.onClick}>
+            {props.value}
+          </button>
+      );
   }
-
-  render() {
-    const valueSquares = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-    ];
-
+  class Board extends React.Component {
+    renderSquare(i,isWinner) {
+      return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} isWinner={isWinner} />;
+    }
+    
+    render() {
+        const valueSquares=[
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+        ];
+        const listWinners = this.props.winner;
+        
     return (
       <div>
         {
-          /* <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}      
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div> */
           valueSquares.map((value, index) => {
             return <div className="board-row" key={index}>
-              {
-                value.map((valor, posicion) => {
-                  return <b key={posicion}>{this.renderSquare(valor)}</b>
-                })
-              }
-            </div>
-          })
-        }
+                    {
+                        value.map((valor,posicion) => {
+                            const isWinner= (listWinners!=null &&(valor===listWinners[0] || valor===listWinners[1] || valor===listWinners[2])) ? true : false
+                            return <b key={posicion}>{this.renderSquare(valor,isWinner)}</b>
+                        })
+                    }
+                   </div>
+           })
+          }
       </div>
     );
   }
@@ -131,11 +121,12 @@ class Game extends React.Component {
 
 
     let status;
+    
+    
     if (winner) {
-      status = 'Winner: ' + winner;
+      status = 'Winner: ' + current.squares[winner[0]];
     } else if (this.state.stepNumber === 9) {
       status = "El juego termino, es un empate!"
-
     } else
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
@@ -148,7 +139,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            onClick={(i) => this.handleClick(i)} />
+            onClick={(i) => this.handleClick(i)} winner={winner}/>
         </div>
         <div className="game-info">
           <div>{status}</div>
@@ -164,6 +155,7 @@ class Game extends React.Component {
 }
 
 function calculateWinner(squares) {
+  
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -177,27 +169,12 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      //return squares[a];
+      return lines[i];
     }
   }
   return null;
 }
-
-// ========================================
-//   class ShoppingList extends React.Component {
-//     render() {
-//       return (
-//         <div className="shopping-list">
-//           <h1>Lista de compras para {this.props.name}</h1>
-//           <ul>
-//             <li>Instagram</li>
-//             <li>WhatsApp</li>
-//             <li>Oculus</li>
-//           </ul>
-//         </div>
-//       );
-//     }
-//   }
 
 // ========================================
 ReactDOM.render(
